@@ -3,6 +3,7 @@ import requests
 import csv
 
 urls = []
+EXCLUSIONS = ['id', 'media', 'font', 'type', 'web' ] #CSS/JS reserved keywords to be excluded 
 
 # Read urls from urls.csv and saving as url list
 with open('urls.csv', newline='') as csvfile:
@@ -11,13 +12,16 @@ with open('urls.csv', newline='') as csvfile:
         urls.append(''.join(row))
 
 def findHandles(text):
-    #A regex to search for handles
+    #A regex expression to find handles
     handles = re.findall('(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)', text)
     return cleanHandles(handles)
 
 def cleanHandles(handles):
-    cleanedHandles = sorted(set(handles)) #Remove duplicates and sort alphabetically
-    return cleanedHandles
+    cleanedHandles = set(handles) #Remove duplicates and sort alphabetically
+    for exclusion in EXCLUSIONS:
+        if exclusion in cleanedHandles:
+            cleanedHandles.remove(exclusion)
+    return sorted(cleanedHandles)
 
 def getHandlesforURL(url):
     r = requests.get(url)
