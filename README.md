@@ -3,7 +3,7 @@
 
 Application to parse the url handles for each url from a given list of urls. 
 
-## Use Instructions
+## Usage Instructions
 ```
 1. Create a virtualenv with python3
 2. run pip install -r requirements.txt
